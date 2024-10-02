@@ -13,12 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Process incoming design tokens
-      - name: Use incoming design tokens
+      # Step 2: Process incoming design tokens and overwrite tokens/tokens.json
+      - name: Overwrite tokens/tokens.json with incoming tokens
         run: |
-          echo "${{ github.event.client_payload.tokens }}" > figma-tokens.json
-          # Process the tokens, modify or transform as needed
-          echo "Processing design tokens received from Figma..."
+          mkdir -p tokens  # Ensure the 'tokens' directory exists
+          echo "${{ github.event.client_payload.tokens }}" > tokens/tokens.json
+          echo "Overwriting tokens/tokens.json with the new design tokens from Figma..."
 
       # Step 3: Create a new branch for the changes
       - name: Create a new branch
