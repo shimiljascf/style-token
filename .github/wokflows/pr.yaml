@@ -1,0 +1,17 @@
+name: Transform Design Tokens
+
+on:
+  repository_dispatch:
+    types: [figma-design-token]
+
+jobs:
+  transform_tokens:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Run token transformation script
+        run: |
+          echo "Received tokens from Figma..."
+          # Add token transformation logic here
