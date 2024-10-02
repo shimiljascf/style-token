@@ -13,29 +13,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Step 2: Print GitHub event payload for debugging
       - name: Print GitHub event payload
         run: |
           echo "Printing the entire github.event.client_payload for debugging..."
           echo "${{ toJson(github.event.client_payload) }}"
 
-      # Step 2: Process incoming design tokens and overwrite tokens/tokens.json
+      # Step 3: Process incoming design tokens and overwrite tokens/tokens.json
       - name: Overwrite tokens/tokens.json with incoming tokens
         run: |
           mkdir -p tokens  # Ensure the 'tokens' directory exists
           echo "${{ github.event.client_payload.tokens }}" > tokens/tokens.json
           echo "Overwriting tokens/tokens.json with the new design tokens from Figma..."
 
-      # Step 3: Create a new branch for the changes
+      # Step 4: Create a new branch for the changes
       - name: Create a new branch
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git checkout -b "update-figma-tokens-${{ github.run_id }}"
-          git add figma-tokens.json
+          git add tokens/tokens.json  # Correct file path
           git commit -m "${{ github.event.client_payload.commitMessage }}"
           git push origin "update-figma-tokens-${{ github.run_id }}"
 
-      # Step 4: Create a Pull Request
+      # Step 5: Create a Pull Request
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         with:
