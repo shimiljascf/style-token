@@ -1,16 +1,41 @@
-name: Transform Design Tokens
+name: Create Pull Request from Figma Tokens
 
 on:
   repository_dispatch:
-    types: [figma-design-token]
+    types: [figma-design-token]  # Matches the event_type sent from Figma
 
 jobs:
-  transform_tokens:
+  create-pr:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout the repository
+      # Step 1: Checkout the repository
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run token transformation script
+      # Step 2: Process incoming design tokens
+      - name: Use incoming design tokens
         run: |
-          echo "Transform
+          echo "${{ github.event.client_payload.tokens }}" > figma-tokens.json
+          # Process the tokens, modify or transform as needed
+          echo "Processing design tokens received from Figma..."
+
+      # Step 3: Create a new branch for the changes
+      - name: Create a new branch
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git checkout -b "update-figma-tokens-${{ github.run_id }}"
+          git add figma-tokens.json
+          git commit -m "${{ github.event.client_payload.commitMessage }}"
+          git push origin "update-figma-tokens-${{ github.run_id }}"
+
+      # Step 4: Create a Pull Request
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: "update-figma-tokens-${{ github.run_id }}"
+          title: "Update Design Tokens from Figma"
+          body: "This PR updates the design tokens with the latest data from Figma."
+          base: main
