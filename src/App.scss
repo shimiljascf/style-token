@@ -1,0 +1,31 @@
+@import "../css/variables.scss";
+
+
+
+.App {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  background-color: $color-black
+}
+
+.button-youtubestyle {
+  background: $color-red; // Assuming the red is used for the background
+  color: $color-black;
+  font-family: $typography-youtubestyle-font-family;
+  font-size: #{$typography-youtubestyle-font-size}px;
+  font-weight: $typography-youtubestyle-font-weight;
+  font-style: $typography-youtubestyle-font-style;
+  text-decoration: $typography-youtubestyle-text-decoration;
+  letter-spacing: $typography-youtubestyle-letter-spacing;
+  text-transform: $typography-youtubestyle-text-case;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
